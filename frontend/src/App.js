@@ -1,9 +1,11 @@
 import { React } from "react";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 
+import { GlobalProvider } from "./context/GlobalState";
 import Navbar from "./components/Navbar/Navbar";
-
 import Dashboard from "./pages/DashboardPage/Dashboard";
+import Login from "./pages/LoginPage/Login";
+import BgRemove from "./pages/app/BgRemove/BgRemove";
 
 function App() {
   return (
@@ -15,14 +17,18 @@ function App() {
         minHeight: "100vh",
       }}
     >
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route exact path="/" element={<Dashboard />} />
-          <Route path="/myapi" element={<Dashboard />} />
-          <Route path="/myaccount" element={<Dashboard />} />
-        </Routes>
-      </BrowserRouter>
+      <GlobalProvider>
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route exact path="/" element={<Dashboard />} />
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/myapi" element={<Dashboard />} />
+            <Route exact path="/myaccount" element={<Dashboard />} />
+            <Route exact path="/app/bg-remove" element={<BgRemove />} />
+          </Routes>
+        </BrowserRouter>
+      </GlobalProvider>
     </div>
   );
 }

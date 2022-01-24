@@ -1,6 +1,8 @@
-import { React } from "react";
+import React, { useEffect } from "react";
 import propTypes from "prop-types";
+import { Link } from "react-router-dom";
 
+import { GlobalContext } from "../../context/GlobalState";
 import Card from "../../components/Card/Card";
 import styles from "./Dashboard.module.scss";
 
@@ -36,7 +38,9 @@ const Ad = ({ image, title, desc }) => {
           <span className={styles.adDesc}>{desc}</span>
         </div>
         <div className={styles.buttonContainer}>
-          <button className={styles.button}>View App</button>
+          <Link to="/app/bg-remove">
+            <button className={styles.button}>View App</button>
+          </Link>
         </div>
       </div>
     </div>
@@ -50,6 +54,12 @@ Ad.propTypes = {
 };
 
 const Dashboard = () => {
+  const { enableNavbar } = React.useContext(GlobalContext);
+
+  useEffect(() => {
+    enableNavbar(true);
+  }, []);
+
   return (
     <div className={styles.home}>
       <Ad

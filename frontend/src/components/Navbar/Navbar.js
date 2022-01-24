@@ -1,48 +1,48 @@
-import { React, useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
+import { GlobalContext } from "../../context/GlobalState";
 import styles from "./Navbar.module.scss";
 import logo from "../../assets/images/logo.svg";
 
 import Button from "../Button/Button";
 
 const Navbar = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
   const [navLinks, setNavLinks] = useState([]);
+  const { navbar, loggedIn, logout } = useContext(GlobalContext);
 
-  const logIn = () => {
-    // eslint-disable-next-line no-undef
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/login`, { method: "GET" })
-      .then((res) => res.json())
-      .catch((err) => console.log(err));
-
-    if (!loggedIn) {
-      setLoggedIn(true);
+  useEffect(() => {
+    if (loggedIn) {
       setNavLinks([
         { name: "My APIs", path: "/myapi" },
         { name: "My Account", path: "/myaccount" },
       ]);
     } else {
-      setLoggedIn(false);
       setNavLinks([]);
     }
-  };
+    console.log("loggedIn", loggedIn);
+    console.log("navLinks", navLinks);
+  }, [loggedIn]);
 
   return (
     <nav className={styles.container}>
       <NavLink to="/">
         <img src={logo} alt="logo" />
       </NavLink>
-      <div>
+      <div hidden={navbar}>
         {navLinks.map((e, i) => (
           <NavLink key={i} className={styles.lnText} to={e.path}>
             {e.name}
           </NavLink>
         ))}
-        <Button
-          text={loggedIn ? "+ New API" : "Login/Signup"}
-          onClick={() => logIn()}
-        />
+        {loggedIn ? (
+          <Button text="+ New API" onClick={() => logout()} />
+        ) : (
+          <Button
+            text="Login/Signup"
+            onClick={() => (location.href = "/login")}
+          />
+        )}
       </div>
     </nav>
   );
