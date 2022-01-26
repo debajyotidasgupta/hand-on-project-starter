@@ -83,7 +83,8 @@
   margin-bottom: 2rem;
 }
 
-.formButton {
+.formButton,
+.downloadLink {
   margin-top: 2.2rem;
   background-color: #142683;
   width: 100%;
@@ -91,6 +92,7 @@
   color: white;
   font-family: "DM Sans", sans-serif;
   font-size: 1rem;
+  text-align: center;
   font-weight: 700;
   text-decoration: none;
   border-radius: 0.4rem;
