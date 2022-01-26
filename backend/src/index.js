@@ -1,6 +1,10 @@
 const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
+const axios = require("axios");
+const FormData = require("form-data");
+const fs = require("fs");
+const path = require("path");
 
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
@@ -11,7 +15,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb" }));
 
 mongoose
   .connect(process.env.MONGODB_URL)
@@ -70,6 +74,47 @@ app.post("/signup", (req, res) => {
       res.status(401).json({
         message: "Failed Signup",
       });
+    });
+});
+
+app.post("/upload", (req, res) => {
+  const { image } = req.body;
+  const imageData = image.substring(image.indexOf(",") + 1);
+  fs.writeFileSync("tmp.png", imageData, { encoding: "base64" });
+
+  const inputPath = "tmp.png";
+  const formData = new FormData();
+  formData.append("size", "auto");
+  formData.append(
+    "image_file",
+    fs.createReadStream(inputPath),
+    path.basename(inputPath),
+  );
+
+  axios({
+    method: "post",
+    url: "https://api.remove.bg/v1.0/removebg",
+    data: formData,
+    responseType: "arraybuffer",
+    headers: {
+      ...formData.getHeaders(),
+      "X-Api-Key": `${process.env.REMOVE_BG_API_KEY}`,
+    },
+    encoding: "base64",
+  })
+    .then((response) => {
+      if (response.status != 200)
+        return console.error("Error:", response.status, response.statusText);
+
+      console.log("Success:", response.status, response.statusText);
+      return res.status(200).json({
+        message: "Image uploaded successfully",
+        image: response.data,
+      });
+      // fs.writeFileSync("../frontend/bg.png", response.data);
+    })
+    .catch((error) => {
+      return console.error("Request failed:", error);
     });
 });
 
