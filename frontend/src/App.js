@@ -28,11 +28,7 @@ function App() {
           <Modal show={showModal} handleClose={flipModal} />
           <Navbar flipModal={flipModal} />
           <Routes>
-            <Route
-              exact
-              path="/"
-              element={<Dashboard ad={true} msg={0} demo={8} />}
-            />
+            <Route exact path="/" element={<Dashboard ad={true} msg={0} />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/myapi" element={<Api msg={1} demo={4} />} />
             <Route

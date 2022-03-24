@@ -50,7 +50,7 @@ Ad.propTypes = {
   desc: propTypes.string,
 };
 
-const Dashboard = ({ ad, msg, demo }) => {
+const Dashboard = ({ ad, msg }) => {
   const { enableNavbar, loggedIn } = React.useContext(GlobalContext);
   const [allData, setAllData] = useState([]);
 
@@ -65,43 +65,46 @@ const Dashboard = ({ ad, msg, demo }) => {
           "The description of the API in quick brief and we will truncate it here...",
       };
       list.push(object);
-      // setAllData([...allData, object]);
     }
 
     const token = localStorage.getItem("token");
 
-    // eslint-disable-next-line no-undef
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/apis`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          return res.json().then((data) => {
-            data = data.apis;
-            for (let i = 0; i < data.length; i++) {
-              const object = {
-                key: data[i]._id,
-                image: data[i].url,
-                title: data[i].name,
-                brief: data[i].description.substring(0, 100) + "...",
-              };
-              list.push(object);
-            }
-            setAllData(list);
-          });
-        }
+    if (token) {
+      // eslint-disable-next-line no-undef
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/apis`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          if (res.status === 200) {
+            return res.json().then((data) => {
+              data = data.apis;
+              for (let i = 0; i < data.length; i++) {
+                const object = {
+                  key: data[i]._id,
+                  image: data[i].url,
+                  title: data[i].name,
+                  brief: data[i].description.substring(0, 100) + "...",
+                };
+                list.push(object);
+              }
+              setAllData(list);
+            });
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      setAllData(list);
+    }
   }
 
   useEffect(() => {
     enableNavbar(true);
-    dummies(demo);
-  }, [allData]);
+    dummies(8);
+  }, []);
 
   return (
     <>
