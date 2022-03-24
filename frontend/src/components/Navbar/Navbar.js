@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import propTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 
 import { GlobalContext } from "../../context/GlobalState";
@@ -7,9 +8,9 @@ import logo from "../../assets/images/logo.svg";
 
 import Button from "../Button/Button";
 
-const Navbar = () => {
+const Navbar = ({ flipModal }) => {
   const [navLinks, setNavLinks] = useState([]);
-  const { navbar, loggedIn, logout } = useContext(GlobalContext);
+  const { navbar, loggedIn } = useContext(GlobalContext);
 
   useEffect(() => {
     if (loggedIn) {
@@ -36,7 +37,7 @@ const Navbar = () => {
           </NavLink>
         ))}
         {loggedIn ? (
-          <Button text="+ New API" onClick={() => logout()} />
+          <Button text="+ New API" onClick={flipModal} />
         ) : (
           <Button
             text="Login/Signup"
@@ -46,6 +47,10 @@ const Navbar = () => {
       </div>
     </nav>
   );
+};
+
+Navbar.propTypes = {
+  flipModal: propTypes.func,
 };
 
 export default Navbar;

@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import styles from "./Card.module.scss";
 
 const Card = ({ image, title, brief }) => {
-  console.log(image);
   return (
     <div className={styles.card}>
       <img src={image} className={styles.cardImgTop} alt="API" />

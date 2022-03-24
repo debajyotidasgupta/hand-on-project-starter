@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import propTypes from "prop-types";
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 import { GlobalContext } from "../../context/GlobalState";
 import Card from "../../components/Card/Card";
-import styles from "./Dashboard.module.scss";
+import styles from "./Account.module.scss";
 
 const images = [
   "https://media.istockphoto.com/photos/mature-woman-with-beach-hat-and-sunglasses-picture-id1137373616?k=20&m=1137373616&s=612x612&w=0&h=zYyuzYZ93h_PQVCQAc0-ePUYWZ8BNZObsnNrwf3mRNQ=",
@@ -24,33 +24,7 @@ function makeid(length) {
   return result;
 }
 
-const Ad = ({ image, title, desc }) => {
-  return (
-    <div className={styles.ad}>
-      <img className={styles.adImg} src={image} alt="ad" />
-      <div className={styles.adContainer}>
-        <div className={styles.adDesign}> </div>
-        <div className={styles.adText}>
-          <span className={styles.adTitle}>{title}</span>
-          <span className={styles.adDesc}>{desc}</span>
-        </div>
-        <div className={styles.buttonContainer}>
-          <Link to="/app/bg-remove">
-            <button className={styles.button}>View App</button>
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-Ad.propTypes = {
-  image: propTypes.string,
-  title: propTypes.string,
-  desc: propTypes.string,
-};
-
-const Dashboard = ({ ad, msg, demo }) => {
+const Account = ({ msg, demo }) => {
   const { enableNavbar, loggedIn } = React.useContext(GlobalContext);
   const [allData, setAllData] = useState([]);
 
@@ -101,19 +75,12 @@ const Dashboard = ({ ad, msg, demo }) => {
   useEffect(() => {
     enableNavbar(true);
     dummies(demo);
-  }, [allData]);
+  }, []);
 
   return (
     <>
-      {!loggedIn && !ad && <Navigate to="/" />}
+      {!loggedIn && <Navigate to="/" />}
       <div className={styles.home}>
-        {ad && (
-          <Ad
-            image={images[0]}
-            title="Background Image Remove"
-            desc="100% automatic and free"
-          />
-        )}
         <span className={styles.title}>
           {msg == 0 ? "All APIs" : "Your uploaded APIs"}
         </span>
@@ -133,10 +100,10 @@ const Dashboard = ({ ad, msg, demo }) => {
   );
 };
 
-Dashboard.propTypes = {
+Account.propTypes = {
   ad: propTypes.bool,
   msg: propTypes.number,
   demo: propTypes.number,
 };
 
-export default Dashboard;
+export default Account;

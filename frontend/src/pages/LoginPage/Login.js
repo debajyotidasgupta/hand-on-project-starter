@@ -34,6 +34,10 @@ const Login = () => {
     fetch(`${process.env.REACT_APP_BACKEND_URL}/auth`, requestOptions)
       .then((res) => {
         if (res.status == 200) {
+          res.json().then((data) => {
+            localStorage.setItem("token", data.token);
+          });
+
           login();
         } else if (res.status == 401) {
           console.log(requestOptions);
@@ -41,6 +45,9 @@ const Login = () => {
           fetch(`${process.env.REACT_APP_BACKEND_URL}/signup`, requestOptions)
             .then((res) => {
               if (res.status == 200) {
+                res.json().then((data) => {
+                  localStorage.setItem("token", data.token);
+                });
                 login();
               }
             })
